@@ -370,8 +370,9 @@ const addOrUpdateProductReview = async (req, res) => {
     const userPlayTime = playTimeData ? playTimeData.time : 0;
     const requiredPlayTime = 60; // e.g., 60 minutes
 
-    if (userPlayTime < requiredPlayTime) {
-      return res.status(403).json({ message: `You must play the game for at least ${requiredPlayTime} minutes to rate or comment.` });
+    // Allow admins to bypass the playtime requirement
+    if (!req.user.isAdmin && userPlayTime < requiredPlayTime) {
+      return res.status(403).json({ message: `You must play the game for at least ${requiredPlayTime} minutes to rate or comment. Current playtime: ${userPlayTime} minutes.` });
     }
 
     // Admin disable check

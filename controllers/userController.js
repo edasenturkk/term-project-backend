@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
@@ -170,7 +169,7 @@ const deleteUser = async (req, res) => {
 
     // Get all products where this user has left a review or comment
     const productsWithUserInteraction = await Product.find({
-      'reviews.user': mongoose.Types.ObjectId(userId)
+      'reviews.user': new mongoose.Types.ObjectId(userId)
     });
 
     // For each product, remove this user's reviews and recalculate ratings
@@ -315,7 +314,7 @@ const getUserStats = async (req, res) => {
     
     // Get all products where this user has left a review
     const productsWithUserReviews = await Product.find({
-      'reviews.user': mongoose.Types.ObjectId(userId)
+      'reviews.user': new mongoose.Types.ObjectId(userId)
     });
     
     // Extract user's ratings
@@ -419,7 +418,7 @@ const getUserComments = async (req, res) => {
     
     // Get all products where this user has left a comment
     const products = await Product.find({
-      'reviews.user': mongoose.Types.ObjectId(userId),
+      'reviews.user': new mongoose.Types.ObjectId(userId),
       'reviews.comment': { $exists: true, $ne: '' }
     });
     
@@ -498,7 +497,7 @@ const getUserDashboard = async (req, res) => {
     
     // 3. Get all products where this user has left a review
     const productsWithUserReviews = await Product.find({
-      'reviews.user': mongoose.Types.ObjectId(userId)
+      'reviews.user': new mongoose.Types.ObjectId(userId)
     });
     
     // 4. Calculate average rating
